@@ -8,13 +8,14 @@ class UriSegment {
     static final String WILDCARD = "*";
 
     final short index;
-    final String name;
-    final boolean dynamic;
     final boolean wildcard;
-    final boolean matches;
+
+    private final String name;
+    private final boolean matches;
 
     UriSegment(short index, String name) {
         this.index = index;
+        boolean dynamic;
         if (WILDCARD.equals(name)) {
             wildcard = true;
             dynamic = false;
@@ -25,8 +26,8 @@ class UriSegment {
             matches = !dynamic;
         }
         if (dynamic) {
-            this.name = name.substring(1, name.length() - 1).trim();
             // { username } -> username
+            this.name = name.substring(1, name.length() - 1).trim();
         } else {
             this.name = name;
         }

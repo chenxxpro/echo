@@ -11,7 +11,7 @@ class UriMatcher {
 
     private final String pattern;
     private final boolean dynamic;
-    private final boolean wilcard;
+    private final boolean wildcard;
     private final List<UriSegment> segments;
 
     UriMatcher(String definePattern) {
@@ -21,7 +21,7 @@ class UriMatcher {
         this.pattern = definePattern;
         if (UriSegment.WILDCARD.equals(this.pattern)) {
             dynamic = false;
-            wilcard = true;
+            wildcard = true;
             segments = Collections.emptyList();
         } else {
             // 解析定义的路由路径
@@ -50,7 +50,7 @@ class UriMatcher {
             }
 
             this.dynamic = dynamic;
-            this.wilcard = wildcard;
+            this.wildcard = wildcard;
             // 动态参数模式，或者通配符号模式，需要解析URI各个分段
             if (dynamic || wildcard) {
                 this.segments = new ArrayList<>(array.length);
@@ -64,7 +64,7 @@ class UriMatcher {
         }
     }
 
-    public String pattern() {
+    String pattern() {
         return pattern;
     }
 
@@ -88,35 +88,34 @@ class UriMatcher {
             return true;
         }
         // test matches
-        if (dynamic || wilcard) {
-            final String[] requests = Texts.split(requestUri, "/");
-            final int defineLength = segments.size();
-            if (dynamic) {
-                return requests.length == defineLength
-                        && segments.stream()
-                        .allMatch((segment ->
-                                segment.match(requests[segment.index])));
-            } else/* if (wildcard)*/ {
-                // 如果定义的路径长度大于请求路径，不匹配： /api/users/* 对比请求： /users
-                if (defineLength > requests.length) {
-                    return false;
-                }
-                // 定义路径长度 小于等于 请求路径:
-                // 分段中，任何一个分段不匹配，则结果是不匹配。
-                for (int i = 0; i < defineLength; i++) {
-                    final UriSegment seg = segments.get(i);
-                    // 通配符号，后面全部匹配
-                    if (seg.wildcard) {
-                        break;
-                    }
-                    if (!seg.match(requests[i])) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        } else {
+        if (!dynamic && !wildcard) {
             return pattern.equals(requestUri);
         }
+
+        final String[] requests = Texts.split(requestUri, "/");
+        final int defineLength = segments.size();
+        if (dynamic) {
+            return requests.length == defineLength &&
+                    segments.stream()
+                    .allMatch((segment ->
+                            segment.match(requests[segment.index])));
+        }
+        // 如果定义的路径长度大于请求路径，不匹配： /api/users/* 对比请求： /users
+        if (defineLength > requests.length) {
+            return false;
+        }
+        // 定义路径长度 小于等于 请求路径:
+        // 分段中，任何一个分段不匹配，则结果是不匹配。
+        for (int i = 0; i < defineLength; i++) {
+            final UriSegment seg = segments.get(i);
+            // 通配符号，后面全部匹配
+            if (seg.wildcard) {
+                break;
+            }
+            if (!seg.match(requests[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 }
