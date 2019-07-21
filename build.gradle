@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'net.nextabc'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url "https://maven.aliyun.com/repository/central" }
+    maven { url "https://maven.aliyun.com/repository/jcenter" }
+    mavenCentral()
+}
+
+dependencies {
+    // LOGGING
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.slf4j:slf4j-simple:1.7.25'
+    // Servlet
+    compile 'javax.servlet:javax.servlet-api:3.1.0'
+    // Jetty Server
+    compile 'org.eclipse.jetty:jetty-server:9.4.19.v20190610'
+    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
