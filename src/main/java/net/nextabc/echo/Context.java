@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author 陈哈哈 yoojiachen@gmail.com
  **/
-public class Context extends QueryMap {
+public class Context extends Query {
 
     private static final ThreadLocal<Context> TL_CTX =
             ThreadLocal.withInitial(() -> new Context(new HashMap<>()));

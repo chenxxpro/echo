@@ -1,7 +1,6 @@
 package net.nextabc.echo.sample;
 
-import net.nextabc.echo.EchoServer;
-import net.nextabc.echo.Routable;
+import net.nextabc.echo.Echo;
 
 /**
  * @author 陈哈哈 yoojiachen@gmail.com
@@ -10,10 +9,10 @@ public class SampleServer {
 
     public static void main(String[] args) {
 
-        final EchoServer echo = new EchoServer();
+        final Echo echo = new Echo();
 
-        echo.BEFORE(Routable.GET("/hello"), (req, resp) -> {
-            resp.halt(500, "{\"error\": \"gun\"}");
+        echo.BEFORE("/hello", (req, resp) -> {
+            Echo.HALT(500, "{\"error\": \"gun\"}");
         });
 
         echo.GROUP("/wx", (group) -> {

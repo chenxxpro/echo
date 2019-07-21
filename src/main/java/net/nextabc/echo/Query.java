@@ -10,11 +10,11 @@ import java.util.Set;
 /**
  * @author 陈哈哈 yoojiachen@gmail.com
  **/
-public class QueryMap implements Map<String, Object> {
+public class Query implements Map<String, Object> {
 
     private final Map<String, Object> mRealMap;
 
-    public QueryMap(Map<String, Object> realMap) {
+    public Query(Map<String, Object> realMap) {
         mRealMap = realMap;
     }
 

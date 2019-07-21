@@ -6,38 +6,38 @@ package net.nextabc.echo;
 public class RouteGroup {
 
     private final String path;
-    private final EchoServer echo;
+    private final Echo ref;
 
-    RouteGroup(String path, EchoServer echo) {
+    RouteGroup(String path, Echo echo) {
         this.path = Texts.requireNonEmpty(path);
         if (path.contains(UriSegment.WILDCARD)) {
             throw new IllegalArgumentException("Group.path must be static/fixed path, was: " + path);
         }
-        this.echo = echo;
+        this.ref = echo;
     }
 
     public RouteGroup GET(String pattern, Handler handler) {
-        echo.GET(groupPattern(pattern), handler);
+        ref.GET(groupPattern(pattern), handler);
         return this;
     }
 
     public RouteGroup POST(String pattern, Handler handler) {
-        echo.POST(groupPattern(pattern), handler);
+        ref.POST(groupPattern(pattern), handler);
         return this;
     }
 
     public RouteGroup DELETE(String pattern, Handler handler) {
-        echo.DELETE(groupPattern(pattern), handler);
+        ref.DELETE(groupPattern(pattern), handler);
         return this;
     }
 
     public RouteGroup PUT(String pattern, Handler handler) {
-        echo.PUT(groupPattern(pattern), handler);
+        ref.PUT(groupPattern(pattern), handler);
         return this;
     }
 
     public RouteGroup OPTION(String pattern, Handler handler) {
-        echo.OPTION(groupPattern(pattern), handler);
+        ref.OPTION(groupPattern(pattern), handler);
         return this;
     }
 

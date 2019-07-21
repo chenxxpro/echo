@@ -109,17 +109,6 @@ public class Response {
         bodyWriter.write(jsonChars);
     }
 
-    /**
-     * Halt立即中断请求处理，返回一个状态码和Body数据到客户端。
-     *
-     * @param statusCode 状态码
-     * @param body       Body数据
-     * @throws HaltException Halt异常
-     */
-    public void halt(int statusCode, String body) throws HaltException {
-        throw new HaltException(statusCode, body);
-    }
-
     //// package access
 
     final void flush() {
