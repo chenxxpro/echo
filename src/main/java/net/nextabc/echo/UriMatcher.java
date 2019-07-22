@@ -16,7 +16,10 @@ class UriMatcher {
 
     UriMatcher(String definePattern) {
         if (null == definePattern || definePattern.isEmpty()) {
-            throw new IllegalArgumentException("Define pattern muste be specified");
+            throw new IllegalArgumentException("Define pattern must be specified");
+        }
+        if (!UriSegment.WILDCARD.equals(definePattern) && '/' != definePattern.charAt(0)) {
+            throw new IllegalArgumentException("Define pattern must be starts with '/', was: " + definePattern);
         }
         this.pattern = definePattern;
         if (UriSegment.WILDCARD.equals(this.pattern)) {
@@ -31,12 +34,11 @@ class UriMatcher {
             for (int i = 0; i < array.length; i++) {
                 final String item = array[i].trim();
                 if (UriSegment.WILDCARD.equals(item)) {
-                    wildcard = true;
                     // 通配符必须是最后一个分段
                     if (i != array.length - 1) {
                         throw new IllegalArgumentException("Wildcard( * ) MUST BE the last segment in: " + definePattern);
                     }
-
+                    wildcard = true;
                 } else {
                     // 存在 {xxx} 这样的字段时，为动态参数模式：
                     final int startIndex = item.indexOf('{');
@@ -97,8 +99,8 @@ class UriMatcher {
         if (dynamic) {
             return requests.length == defineLength &&
                     segments.stream()
-                    .allMatch((segment ->
-                            segment.match(requests[segment.index])));
+                            .allMatch((segment ->
+                                    segment.match(requests[segment.index])));
         }
         // 如果定义的路径长度大于请求路径，不匹配： /api/users/* 对比请求： /users
         if (defineLength > requests.length) {

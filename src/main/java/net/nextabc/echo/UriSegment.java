@@ -21,7 +21,7 @@ class UriSegment {
             dynamic = false;
             matches = false;
         } else {
-            wildcard = true;
+            wildcard = false;
             dynamic = isDynamic(name);
             matches = !dynamic;
         }
